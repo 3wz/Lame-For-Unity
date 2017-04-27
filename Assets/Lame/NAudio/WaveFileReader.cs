@@ -52,28 +52,28 @@ namespace NAudio.Wave.WZT
         /// <param name="dataChunkPosition">The position of the data chunk</param>
         /// <param name="dataChunkLength">The length of the data chunk</param>
         /// <param name="chunks">Additional chunks found</param>
-        public static void ReadWaveHeader(Stream stream, out WaveFormat format, out long dataChunkPosition, out int dataChunkLength, List<RiffChunk> chunks)        
+        public static void ReadWaveHeader(Stream stream, out WaveFormat format, out long dataChunkPosition, out int dataChunkLength, List<RiffChunk> chunks)
         {
             dataChunkPosition = -1;
             format = null;
             BinaryReader br = new BinaryReader(stream);
-            if (br.ReadInt32() != 1179011410)//WaveInterop.mmioStringToFOURCC("RIFF", 0)
+            if (GetStringByBytes(br.ReadBytes(4), 4) != "RIFF")//WaveInterop.mmioStringToFOURCC("RIFF", 0)
             {
                 throw new FormatException("Not a WAVE file - no RIFF header");
             }
             uint fileSize = br.ReadUInt32(); // read the file size (minus 8 bytes)
-            if (br.ReadInt32() != 1163280727)//WaveInterop.mmioStringToFOURCC("WAVE", 0)
+            if (GetStringByBytes(br.ReadBytes(4), 4) != "WAVE")//WaveInterop.mmioStringToFOURCC("WAVE", 0)
             {
                 throw new FormatException("Not a WAVE file - no WAVE header");
             }
-            
+
             int dataChunkID = 1635017060;//WaveInterop.mmioStringToFOURCC("data", 0)
             int formatChunkId = 544501094;//WaveInterop.mmioStringToFOURCC("fmt ", 0)
             dataChunkLength = 0;
 
             // sometimes a file has more data than is specified after the RIFF header
             long stopPosition = Math.Min(fileSize + 8, stream.Length);
-            
+
             // this -8 is so we can be sure that there are at least 8 bytes for a chunk id and length
             while (stream.Position <= stopPosition - 8)
             {
@@ -117,6 +117,24 @@ namespace NAudio.Wave.WZT
                 throw new FormatException("Invalid WAV file - No data chunk found");
             }
         }
+
+        #region Add By WZ
+        /// <summary>
+        /// 将字节数组转换为字符串
+        /// </summary>
+        /// <param name="bts"></param>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        private static string GetStringByBytes(byte[] bts, int len)
+        {
+            char[] tmp = new char[len];
+            for (int i = 0; i < len; i++)
+            {
+                tmp[i] = (char)bts[i];
+            }
+            return new string(tmp);
+        }
+        #endregion
 
         /// <summary>
         /// Gets a list of the additional chunks found in this file
@@ -248,7 +266,7 @@ namespace NAudio.Wave.WZT
         {
             if (count % waveFormat.BlockAlign != 0)
             {
-                throw new ArgumentException(String.Format("Must read complete blocks: requested {0}, block align is {1}",count,this.WaveFormat.BlockAlign));
+                throw new ArgumentException(String.Format("Must read complete blocks: requested {0}, block align is {1}", count, this.WaveFormat.BlockAlign));
             }
             // sometimes there is more junk at the end of the file past the data chunk
             if (Position + count > dataChunkLength)
@@ -257,7 +275,7 @@ namespace NAudio.Wave.WZT
             }
             return waveStream.Read(array, offset, count);
         }
-        
+
         /// <summary>
         /// Attempts to read a sample into a float. n.b. only applicable for uncompressed formats
         /// Will normalise the value read into the range -1.0f to 1.0f if it comes from a PCM encoding
