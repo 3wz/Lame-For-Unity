@@ -22,8 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // 
-using AOT;
-
 
 #endregion
 #region Attributions
@@ -38,6 +36,7 @@ using AOT;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using AOT;
 
 namespace NAudio.Lame
 {
@@ -239,7 +238,7 @@ namespace NAudio.Lame.DLL
         public LibMp3Lame()
         {
             context = NativeMethods.lame_init();
-            InitReportFunctions();
+            //InitReportFunctions();
         }
 
         /// <summary>Destructor</summary>
@@ -304,7 +303,7 @@ namespace NAudio.Lame.DLL
 
         #region Properties
 
-        delegate int setFunc<T>(IntPtr p,T val);
+        delegate int setFunc<T>(IntPtr p, T val);
 
         // wrapper function to simplify calling lame_set_* entry points
         void setter<T>(setFunc<T> f, T value, string name = null)
@@ -322,30 +321,30 @@ namespace NAudio.Lame.DLL
 
         /// <summary>Number of samples (optional)</summary>
         public UInt64 NumSamples
-        { 
-            get { return NativeMethods.lame_get_num_samples(context); } 
-            set { setter(NativeMethods.lame_set_num_samples, value); } 
+        {
+            get { return NativeMethods.lame_get_num_samples(context); }
+            set { setter(NativeMethods.lame_set_num_samples, value); }
         }
 
         /// <summary>Input sample rate</summary>
         public int InputSampleRate
-        { 
-            get { return NativeMethods.lame_get_in_samplerate(context); } 
-            set { setter(NativeMethods.lame_set_in_samplerate, value); } 
+        {
+            get { return NativeMethods.lame_get_in_samplerate(context); }
+            set { setter(NativeMethods.lame_set_in_samplerate, value); }
         }
 
         /// <summary>Number of channels</summary>
         public int NumChannels
-        { 
-            get { return NativeMethods.lame_get_num_channels(context); } 
-            set { setter(NativeMethods.lame_set_num_channels, value); } 
+        {
+            get { return NativeMethods.lame_get_num_channels(context); }
+            set { setter(NativeMethods.lame_set_num_channels, value); }
         }
 
         /// <summary>Global amplification factor</summary>
         public float Scale
-        { 
-            get { return NativeMethods.lame_get_scale(context); } 
-            set { setter(NativeMethods.lame_set_scale, value); } 
+        {
+            get { return NativeMethods.lame_get_scale(context); }
+            set { setter(NativeMethods.lame_set_scale, value); }
         }
 
         /// <summary>Left channel amplification</summary>
@@ -454,14 +453,14 @@ namespace NAudio.Lame.DLL
         public int BitRate
         {
             get { return NativeMethods.lame_get_brate(context); }
-            set { setter(NativeMethods.lame_set_brate, value); } 
+            set { setter(NativeMethods.lame_set_brate, value); }
         }
 
         /// <summary>Output compression ratio</summary>
         public float CompressionRatio
         {
             get { return NativeMethods.lame_get_compression_ratio(context); }
-            set { setter(NativeMethods.lame_set_compression_ratio, value); } 
+            set { setter(NativeMethods.lame_set_compression_ratio, value); }
         }
 
         /// <summary>Set compression preset</summary>
@@ -485,36 +484,36 @@ namespace NAudio.Lame.DLL
         /// <summary>Set output Copyright flag</summary>
         public bool Copyright
         {
-            get { return NativeMethods.lame_get_copyright(context); } 
-            set { setter(NativeMethods.lame_set_copyright, value); } 
+            get { return NativeMethods.lame_get_copyright(context); }
+            set { setter(NativeMethods.lame_set_copyright, value); }
         }
 
         /// <summary>Set output Original flag</summary>
         public bool Original
-        { 
-            get { return NativeMethods.lame_get_original(context); } 
-            set { setter(NativeMethods.lame_set_original, value); } 
+        {
+            get { return NativeMethods.lame_get_original(context); }
+            set { setter(NativeMethods.lame_set_original, value); }
         }
 
         /// <summary>Set error protection.  Uses 2 bytes from each frame for CRC checksum</summary>
         public bool ErrorProtection
-        { 
-            get { return NativeMethods.lame_get_error_protection(context); } 
-            set { setter(NativeMethods.lame_set_error_protection, value); } 
+        {
+            get { return NativeMethods.lame_get_error_protection(context); }
+            set { setter(NativeMethods.lame_set_error_protection, value); }
         }
 
         /// <summary>MP3 'private extension' bit.  Meaningless.</summary>
         public bool Extension
-        { 
-            get { return NativeMethods.lame_get_extension(context); } 
-            set { setter(NativeMethods.lame_set_extension, value); } 
+        {
+            get { return NativeMethods.lame_get_extension(context); }
+            set { setter(NativeMethods.lame_set_extension, value); }
         }
 
         /// <summary>Enforce strict ISO compliance.</summary>
         public bool StrictISO
-        { 
-            get { return NativeMethods.lame_get_strict_ISO(context); } 
-            set { setter(NativeMethods.lame_set_strict_ISO, value); } 
+        {
+            get { return NativeMethods.lame_get_strict_ISO(context); }
+            set { setter(NativeMethods.lame_set_strict_ISO, value); }
         }
 
         #endregion
@@ -574,7 +573,7 @@ namespace NAudio.Lame.DLL
 
         #region Filtering control
 
-        #pragma warning disable 1591
+#pragma warning disable 1591
         public int LowPassFreq { get { return NativeMethods.lame_get_lowpassfreq(context); } set { setter(NativeMethods.lame_set_lowpassfreq, value); } }
 
         public int LowPassWidth { get { return NativeMethods.lame_get_lowpasswidth(context); } set { setter(NativeMethods.lame_set_lowpasswidth, value); } }
@@ -582,12 +581,12 @@ namespace NAudio.Lame.DLL
         public int HighPassFreq { get { return NativeMethods.lame_get_highpassfreq(context); } set { setter(NativeMethods.lame_set_highpassfreq, value); } }
 
         public int HighPassWidth { get { return NativeMethods.lame_get_highpasswidth(context); } set { setter(NativeMethods.lame_set_highpasswidth, value); } }
-        #pragma warning restore 1591
+#pragma warning restore 1591
         #endregion
 
         #region Internal state variables, read only
 
-        #pragma warning disable 1591
+#pragma warning disable 1591
         public MPEGVersion Version { get { return NativeMethods.lame_get_version(context); } }
 
         public int EncoderDelay { get { return NativeMethods.lame_get_encoder_delay(context); } }
@@ -611,7 +610,7 @@ namespace NAudio.Lame.DLL
         public int NoClipGainChange { get { return NativeMethods.lame_get_noclipGainChange(context); } }
 
         public float NoClipScale { get { return NativeMethods.lame_get_noclipScale(context); } }
-        #pragma warning restore 1591
+#pragma warning restore 1591
         #endregion
 
         #endregion
@@ -678,15 +677,10 @@ namespace NAudio.Lame.DLL
 
         internal static class NativeMethods
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             const string libname = @"libmp3lame.dll";
-            #elif UNITY_IOS
+#elif UNITY_IOS
             const string libname = @"__Internal";
-
-
-
-
-
 #elif UNITY_ANDROID
             const string libname = @"map3lame";
 #endif
@@ -1768,7 +1762,7 @@ namespace NAudio.Lame.DLL
             #region Reporting callbacks
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true, CharSet = CharSet.Ansi)]
-			internal delegate void delReportFunction(string fmt,IntPtr args);
+            internal delegate void delReportFunction(string fmt, IntPtr args);
 
             [DllImport(libname, CallingConvention = CallingConvention.Cdecl)]
             internal static extern int lame_set_errorf(IntPtr context, delReportFunction fn);
@@ -1791,97 +1785,97 @@ namespace NAudio.Lame.DLL
 
             #region 'printf' support for reporting functions
 
-            [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ThrowOnUnmappableChar = true, BestFitMapping = false)]
-            internal static extern int _vsnprintf_s(
-                [In, Out, MarshalAs(UnmanagedType.LPStr)] StringBuilder str,
-                int sizeOfBuffer,
-                int count,
-                [In, MarshalAs(UnmanagedType.LPStr)] String format,
-                [In] IntPtr va_args);
+            //[DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ThrowOnUnmappableChar = true, BestFitMapping = false)]
+            //internal static extern int _vsnprintf_s(
+            //    [In, Out, MarshalAs(UnmanagedType.LPStr)] StringBuilder str,
+            //    int sizeOfBuffer,
+            //    int count,
+            //    [In, MarshalAs(UnmanagedType.LPStr)] String format,
+            //    [In] IntPtr va_args);
 
-            internal static string printf(string format, IntPtr va_args)
-            {
-                StringBuilder sb = new StringBuilder(4096);
-                int res = NativeMethods._vsnprintf_s(sb, sb.Capacity, sb.Capacity - 2, format.Replace("\t", "\xFF"), va_args);
-                return sb.ToString().Replace("\xFF", "\t");
-            }
+            //internal static string printf(string format, IntPtr va_args)
+            //{
+            //    StringBuilder sb = new StringBuilder(4096);
+            //    int res = NativeMethods._vsnprintf_s(sb, sb.Capacity, sb.Capacity - 2, format.Replace("\t", "\xFF"), va_args);
+            //    return sb.ToString().Replace("\xFF", "\t");
+            //}
 
             #endregion
         }
 
-        /// <summary>Print out LAME configuration to standard output, or to registered output function</summary>
-        public void PrintConfig()
-        {
-            NativeMethods.lame_print_config(context);
-        }
+        ///// <summary>Print out LAME configuration to standard output, or to registered output function</summary>
+        //public void PrintConfig()
+        //{
+        //    NativeMethods.lame_print_config(context);
+        //}
 
-        /// <summary>Print out LAME internals to standard output, or to registered output function</summary>
-        public void PrintInternals()
-        {
-            NativeMethods.lame_print_internals(context);
-        }
+        ///// <summary>Print out LAME internals to standard output, or to registered output function</summary>
+        //public void PrintInternals()
+        //{
+        //    NativeMethods.lame_print_internals(context);
+        //}
 
         #region Reporting function support
 
-        /// <summary>Delegate for receiving output messages</summary>
-        /// <param name="text">Text to output</param>
-		public delegate void ReportFunction(string text);
+  //      /// <summary>Delegate for receiving output messages</summary>
+  //      /// <param name="text">Text to output</param>
+		//public delegate void ReportFunction(string text);
 
-        private static ReportFunction rptError = null;
-        private static ReportFunction rptDebug = null;
-        private static ReportFunction rptMsg = null;
+  //      private static ReportFunction rptError = null;
+  //      private static ReportFunction rptDebug = null;
+  //      private static ReportFunction rptMsg = null;
 
-        [MonoPInvokeCallback(typeof(ReportFunction))]
-        private static void error_proxy(string format, IntPtr va_args)
-        {
-            string text = NativeMethods.printf(format, va_args);
-            if (rptError != null)
-                rptError(text);
-        }
+  //      [MonoPInvokeCallback(typeof(ReportFunction))]
+  //      private static void error_proxy(string format, IntPtr va_args)
+  //      {
+  //          string text = NativeMethods.printf(format, va_args);
+  //          if (rptError != null)
+  //              rptError(text);
+  //      }
 
-        [MonoPInvokeCallback(typeof(ReportFunction))]
-        private static void debug_proxy(string format, IntPtr va_args)
-        {
-            string text = NativeMethods.printf(format, va_args);
-            if (rptDebug != null)
-                rptDebug(text);
-        }
+  //      [MonoPInvokeCallback(typeof(ReportFunction))]
+  //      private static void debug_proxy(string format, IntPtr va_args)
+  //      {
+  //          string text = NativeMethods.printf(format, va_args);
+  //          if (rptDebug != null)
+  //              rptDebug(text);
+  //      }
 
-        [MonoPInvokeCallback(typeof(ReportFunction))]
-        private static void msg_proxy(string format, IntPtr va_args)
-        {
-            string text = NativeMethods.printf(format, va_args);
-            if (rptMsg != null)
-                rptMsg(text);
-        }
+  //      [MonoPInvokeCallback(typeof(ReportFunction))]
+  //      private static void msg_proxy(string format, IntPtr va_args)
+  //      {
+  //          string text = NativeMethods.printf(format, va_args);
+  //          if (rptMsg != null)
+  //              rptMsg(text);
+  //      }
 
-        private void InitReportFunctions()
-        {
-            NativeMethods.lame_set_errorf(context, error_proxy);
-            NativeMethods.lame_set_debugf(context, debug_proxy);
-            NativeMethods.lame_set_msgf(context, msg_proxy);
-        }
+  //      private void InitReportFunctions()
+  //      {
+  //          NativeMethods.lame_set_errorf(context, error_proxy);
+  //          NativeMethods.lame_set_debugf(context, debug_proxy);
+  //          NativeMethods.lame_set_msgf(context, msg_proxy);
+  //      }
 
-        /// <summary>Set reporting function for error output from LAME library</summary>
-        /// <param name="fn">Reporting function</param>
-        public static void SetErrorFunc(ReportFunction fn)
-        {
-            rptError = fn;
-        }
+  //      /// <summary>Set reporting function for error output from LAME library</summary>
+  //      /// <param name="fn">Reporting function</param>
+  //      public static void SetErrorFunc(ReportFunction fn)
+  //      {
+  //          rptError = fn;
+  //      }
 
-        /// <summary>Set reporting function for debug output from LAME library</summary>
-        /// <param name="fn">Reporting function</param>
-        public static void SetDebugFunc(ReportFunction fn)
-        {
-            rptDebug = fn;
-        }
+  //      /// <summary>Set reporting function for debug output from LAME library</summary>
+  //      /// <param name="fn">Reporting function</param>
+  //      public static void SetDebugFunc(ReportFunction fn)
+  //      {
+  //          rptDebug = fn;
+  //      }
 
-        /// <summary>Set reporting function for message output from LAME library</summary>
-        /// <param name="fn">Reporting function</param>
-        public static void SetMsgFunc(ReportFunction fn)
-        {
-            rptMsg = fn;
-        }
+  //      /// <summary>Set reporting function for message output from LAME library</summary>
+  //      /// <param name="fn">Reporting function</param>
+  //      public static void SetMsgFunc(ReportFunction fn)
+  //      {
+  //          rptMsg = fn;
+  //      }
 
         #endregion
     }

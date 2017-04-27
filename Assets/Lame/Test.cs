@@ -24,7 +24,8 @@ public class Test : MonoBehaviour
             button.onClick.AddListener(() =>
             {
                 string saveMp3Path = Path.Combine(Application.persistentDataPath, testMp3);
-                WaveToMP3(saveWavPath, saveMp3Path, string.IsNullOrEmpty(input.text) ? 128 : int.Parse(input.text));
+                var bitRate = string.IsNullOrEmpty(input.text) ? LAMEPreset.ABR_128 : (LAMEPreset)int.Parse(input.text);
+                WaveToMP3(saveWavPath, saveMp3Path, bitRate);
                 StartCoroutine(PlayMp3(saveMp3Path));
             });
         }
@@ -43,7 +44,7 @@ public class Test : MonoBehaviour
         return filePath;
     }
 
-    public static void WaveToMP3(string waveFileName, string mp3FileName, int bitRate = 128)
+    public static void WaveToMP3(string waveFileName, string mp3FileName, LAMEPreset bitRate = LAMEPreset.ABR_128)
     {
         using (var reader = new WaveFileReader(waveFileName))
         using (var writer = new LameMP3FileWriter(mp3FileName, reader.WaveFormat, bitRate))
