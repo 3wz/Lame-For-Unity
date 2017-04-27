@@ -1,2 +1,4 @@
 # Lame-For-Unity
-适用于Unity 把Wav格式文件转为为MP3的解决方案
+适用于Unity3D 把声音Wav转换为MP3, 用于录音时压缩语音上传等功能
+
+Unity3D项目中Test脚本中有详细的示例代码
