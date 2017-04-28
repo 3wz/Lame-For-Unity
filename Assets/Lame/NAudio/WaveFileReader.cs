@@ -57,18 +57,17 @@ namespace NAudio.Wave.WZT
             dataChunkPosition = -1;
             format = null;
             BinaryReader br = new BinaryReader(stream);
-            if (GetStringByBytes(br.ReadBytes(4), 4) != "RIFF")//WaveInterop.mmioStringToFOURCC("RIFF", 0)
+            if (Encoding.ASCII.GetString(br.ReadBytes(4)) != "RIFF")//WaveInterop.mmioStringToFOURCC("RIFF", 0)
             {
                 throw new FormatException("Not a WAVE file - no RIFF header");
             }
             uint fileSize = br.ReadUInt32(); // read the file size (minus 8 bytes)
-            if (GetStringByBytes(br.ReadBytes(4), 4) != "WAVE")//WaveInterop.mmioStringToFOURCC("WAVE", 0)
+            if (Encoding.ASCII.GetString(br.ReadBytes(4)) != "WAVE")//WaveInterop.mmioStringToFOURCC("WAVE", 0)
             {
                 throw new FormatException("Not a WAVE file - no WAVE header");
             }
-
-            int dataChunkID = 1635017060;//WaveInterop.mmioStringToFOURCC("data", 0)
-            int formatChunkId = 544501094;//WaveInterop.mmioStringToFOURCC("fmt ", 0)
+            int dataChunkID = BitConverter.ToInt32(Encoding.UTF8.GetBytes("data"), 0); ;//WaveInterop.mmioStringToFOURCC("data", 0)
+            int formatChunkId = BitConverter.ToInt32(Encoding.UTF8.GetBytes("fmt "), 0); ;//WaveInterop.mmioStringToFOURCC("fmt ", 0)
             dataChunkLength = 0;
 
             // sometimes a file has more data than is specified after the RIFF header
@@ -117,24 +116,6 @@ namespace NAudio.Wave.WZT
                 throw new FormatException("Invalid WAV file - No data chunk found");
             }
         }
-
-        #region Add By WZ
-        /// <summary>
-        /// 将字节数组转换为字符串
-        /// </summary>
-        /// <param name="bts"></param>
-        /// <param name="len"></param>
-        /// <returns></returns>
-        private static string GetStringByBytes(byte[] bts, int len)
-        {
-            char[] tmp = new char[len];
-            for (int i = 0; i < len; i++)
-            {
-                tmp[i] = (char)bts[i];
-            }
-            return new string(tmp);
-        }
-        #endregion
 
         /// <summary>
         /// Gets a list of the additional chunks found in this file
