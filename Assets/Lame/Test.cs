@@ -60,7 +60,7 @@ public class Test : MonoBehaviour
             if (string.IsNullOrEmpty(www.error))
             {
                 var audioSource = GetComponent<AudioSource>();
-                audioSource.clip = www.audioClip;
+                audioSource.clip = www.GetAudioClip();
                 audioSource.Play();
             }
         }
